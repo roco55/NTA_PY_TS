@@ -7,6 +7,9 @@ import numpy as np
 from datetime import datetime
 rand = random.SystemRandom()
 from multiprocessing import Pool
+import time
+import warnings
+warnings.filterwarnings("ignore")
 
 ###### ADDITIONAL FUNCTIONS ######
 ##################################
@@ -195,7 +198,7 @@ def solve_system(n,keys,system,prime_numbers):
     system = edit_matrix(system, prime_numbers)
     keys = np.array(keys)
     l = len(system)
-    print(system, keys)
+    #print(system, keys)
     good_vectors = []
     good_answers = []
     for i in range(len(keys)):
@@ -248,18 +251,18 @@ def unsolved_answers(a,b,n,prime_numbers):
 
 def solve_index_calculus(keys,system,keys2,system2):
     x = 0
-    print("\nkeys1\n",len(keys),"\nsystem1\n",system,"\nkeys2\n",len(keys2),"\nsystem2\n",system2)
+    #print("\nkeys1\n",len(keys),"\nsystem1\n",system,"\nkeys2\n",len(keys2),"\nsystem2\n",system2)
     for i in range(len(keys2)):
-        print("OOOOOOOOOOOOOOOOO",keys2[i][1])
+        #print("OOOOOOOOOOOOOOOOO",keys2[i][1])
         idx = np.where((system == (system2[i])).all(axis=1))
         if(len(idx[0])>0):
             if(len(idx)>1):
                 idx = int(idx[0])
-                print(keys[idx], keys2[i][1])
+                #print(keys[idx], keys2[i][1])
                 x = mod(keys[idx] - keys2[i][1],n-1)
                 return x
             else:
-                print(keys[idx], keys2[i][1])
+                #print(keys[idx], keys2[i][1])
                 x = mod(keys[idx] - keys2[i][1],n-1)
                 return x
     
@@ -269,7 +272,7 @@ def solve_index_calculus(keys,system,keys2,system2):
 
 def index_calculus(a,b,n):
     prime_numbers = choose_prime_numbers(n)
-    print(prime_numbers)
+    #print(prime_numbers)
     keys, system = linear_equations(a,b,n,prime_numbers)
     keys, system = solve_system(n,keys,system,prime_numbers)
     keys2, system2 = unsolved_answers(a,b,n,prime_numbers)
@@ -277,11 +280,70 @@ def index_calculus(a,b,n):
     x = solve_index_calculus(keys,system,keys2,system2)
     return x
 
-a = 3280206
-b = 2053792
-n = 4760027
+def start(a,b,n):
+    if(n<1000000):
+        print("this number seems a bit too small, are you sure? Y/N")
+        answer = input()
+        if(answer == "Y"):
+            start = time.time()
+            print("Your answer is : ",index_calculus(a,b,n)[0])
+            end = time.time()
+            print("Time to solve: ", end - start)
+            print("Type 2?) Y/N")
+            answer = input()
+            if(answer == "Y"):
+                print("Here we go again... :D")
+                a = int(input("Input a: "))
+                b = int(input("Input b: "))
+                n = int(input("Input n: "))
+                start = time.time()
+                print("Your answer is : ",index_calculus(a,b,n)[0])
+                end = time.time()
+                print("Time to solve: ", end - start)
+        else:
+            print("Okey, this is your last chance")
+            a = input("Input a: ")
+            b = input("Input b: ")
+            n = input("Input n: ")
+            start = time.time()
+            print("Your answer is : ",index_calculus(a,b,n)[0])
+            end = time.time()
+            print("Time to solve: ", end - start)
+            print("Type 2?) Y/N")
+            answer = input()
+            if(answer == "Y"):
+                print("Here we go again... :D")
+                a = int(input("Input a: "))
+                b = int(input("Input b: "))
+                n = int(input("Input n: "))
+                start = time.time()
+                print("Your answer is : ",index_calculus(a,b,n)[0])
+                end = time.time()
+                print("Time to solve: ", end - start)
+    else:
+        print("OH, seems like you are an try-hard type, let`s see...")
+        start = time.time()
+        print("Your answer is : ",index_calculus(a,b,n)[0])
+        end = time.time()
+        print("Time to solve: ", end - start)
+        print("Type 2?) Y/N")
+        answer = input()
+        if(answer == "Y"):
+            print("Here we go again... :D")
+            a = int(input("Input a: "))
+            b = int(input("Input b: "))
+            n = int(input("Input n: "))
+            start = time.time()
+            print("Your answer is : ",index_calculus(a,b,n)[0])
+            end = time.time()
+            print("Time to solve: ", end - start)
 
-print("X = ",index_calculus(a,b,n))
+
+
+a = int(input("Input a: "))
+b = int(input("Input b: "))
+n = int(input("Input n: "))
+start(a,b,n)
 
 
 # prime_numbers = choose_prime_numbers(n)
