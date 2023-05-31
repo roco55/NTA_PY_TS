@@ -221,7 +221,7 @@ def solve_system(n,keys,system,prime_numbers):
 
             
 def linear_equations(a,b,n,prime_numbers):
-    c=15
+    c=int(n/2)
     keys3= []
     keys = []
     system = []
@@ -235,7 +235,7 @@ def unsolved_answers(a,b,n,prime_numbers):
     keys2 = []
     keys3 = []
     system2 = []
-    l = random.sample(range(1, n), len(prime_numbers))
+    l = random.sample(range(1, n), int(n/2))
     for i in range(len(prime_numbers)):
         keys2,keys3 = smoothness(a,b, n ,prime_numbers, l[i], keys2, keys3)
     #print("keys2", keys2)
@@ -248,8 +248,9 @@ def unsolved_answers(a,b,n,prime_numbers):
 
 def solve_index_calculus(keys,system,keys2,system2):
     x = 0
-    print("apappa",keys,"apappa",system,"apappa",keys2,"apappa",system2)
-    for i in range(len(system2)):
+    print("\nkeys1\n",len(keys),"\nsystem1\n",system,"\nkeys2\n",len(keys2),"\nsystem2\n",system2)
+    for i in range(len(keys2)):
+        print("OOOOOOOOOOOOOOOOO",keys2[i][1])
         idx = np.where((system == (system2[i])).all(axis=1))
         if(len(idx[0])>0):
             if(len(idx)>1):
@@ -262,23 +263,23 @@ def solve_index_calculus(keys,system,keys2,system2):
                 x = mod(keys[idx] - keys2[i][1],n-1)
                 return x
     
+    
+    
 
 
 def index_calculus(a,b,n):
     prime_numbers = choose_prime_numbers(n)
     print(prime_numbers)
     keys, system = linear_equations(a,b,n,prime_numbers)
-    print(1)
     keys, system = solve_system(n,keys,system,prime_numbers)
-    print(1)
     keys2, system2 = unsolved_answers(a,b,n,prime_numbers)
     system2 = edit_matrix(system2,prime_numbers)
     x = solve_index_calculus(keys,system,keys2,system2)
     return x
 
-a = 20
-b = 49
-n = 383
+a = 3280206
+b = 2053792
+n = 4760027
 
 print("X = ",index_calculus(a,b,n))
 
