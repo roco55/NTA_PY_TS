@@ -2,9 +2,11 @@ import itertools
 from itertools import *
 import random
 import math
+import sys
 import numpy as np
 from datetime import datetime
 rand = random.SystemRandom()
+from multiprocessing import Pool
 
 ###### ADDITIONAL FUNCTIONS ######
 ##################################
@@ -145,15 +147,15 @@ def system_of_linear_equations(a,b,b1,n,prime_numbers,keys,keys3):
     system = []
     lenght = len(keys)
     i = 0
+ 
     while i < len(keys):
         if(b1 == 1 ):
             power =pow(a,keys[i],n)
         else:
             power = mod(b1*pow(a,keys[i],n),n)
-        
-        #if (power == b):
-        #   print("random success, answer is: ", keys[i] )
-        #   break
+        if (power == b):
+           sys.exit(print("random success, answer is: ", keys[i] ))
+           break
         var = decompose(power,prime_numbers)
         #print(a,keys[i], n, pow(a,keys[i],n))
         if(len(var)==0):
@@ -172,10 +174,20 @@ def linear_equations(a,b,n,prime_numbers):
     c=15
     keys3= []
     keys = []
+    system = []
     k = random.sample(range(1, n + 1), len(prime_numbers)+c)
     for i in range(len(prime_numbers)+c):
         keys = smoothness(a,1, n ,prime_numbers, k[i], keys, keys3)[0]
+
+    ###########MULTIPOCESSING MODULE###########
     #print("keys", keys)
+    # processes = [Process(target=system_of_linear_equations, args=(a,b,1,n,prime_numbers,keys[i],keys3)) for i in range(len(keys))]
+    # for process in processes:
+    #     keys.apeend(process[0])
+    #     system.append(process[1])
+    #     process.start()
+    #     keys, system
+
     keys, system = system_of_linear_equations(a,b,1,n,prime_numbers,keys,keys3)[0],system_of_linear_equations(a,b,1,n,prime_numbers,keys,keys3)[1]
     return keys,system
 
