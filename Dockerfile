@@ -4,4 +4,4 @@ COPY . .
 
 RUN pip install numpy
 
-ENTRYPOINT ["python", "src/main.py"]
+ENTRYPOINT ["python", "src/lab3.py"]

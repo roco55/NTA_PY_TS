@@ -302,9 +302,9 @@ def start(a,b,n):
                 print("Time to solve: ", end - start)
         else:
             print("Okey, this is your last chance")
-            a = input("Input a: ")
-            b = input("Input b: ")
-            n = input("Input n: ")
+            a = int(input("Input a: "))
+            b = int(input("Input b: "))
+            n = int(input("Input n: "))
             start = time.time()
             print("Your answer is : ",index_calculus(a,b,n)[0])
             end = time.time()
