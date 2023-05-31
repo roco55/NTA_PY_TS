@@ -85,12 +85,14 @@ def decompose(n,prime_numbers):
     decompose = []
     i = 0 
     while prime_numbers[i] * prime_numbers[i] <= n:
-       while n % prime_numbers[i] == 0:
+        while n % prime_numbers[i] == 0:
            decompose.append(i)
-           n = n / prime_numbers[i]
+           n = int(n // prime_numbers[i])
            if(n ==1):
                return decompose
-       i = i + 1
+        i = i + 1
+        if(i==len(prime_numbers)):
+            return []
     if(n not in prime_numbers):
         return []
     elif(n > 1):
@@ -99,12 +101,13 @@ def decompose(n,prime_numbers):
 
 #
 def smoothness(a,b, n, prime_numbers,k,keys,keys3):
-    for i in range(len(prime_numbers)):
-        for j in range(n):
-            if(len(decompose(b*(a**k),prime_numbers))>0):
-                keys.append(k)
-                keys3.append([b,k])
-                return keys,keys3
+    if(len(decompose(mod(b*pow(a,k,n),n),prime_numbers))>0):
+        keys.append(k)
+        keys3.append([b,k])
+        return keys,keys3
+    else:
+        return keys,keys3
+    
 
       
 def mod(a,n):
@@ -151,13 +154,13 @@ def system_of_linear_equations(a,b,b1,n,prime_numbers,keys,keys3):
     while i < len(keys):
         if(b1 == 1 ):
             power =pow(a,keys[i],n)
+            if (power == b):
+                sys.exit(print("random success, answer is: ", keys[i] ))
         else:
             power = mod(b1*pow(a,keys[i],n),n)
         if (power == b):
            sys.exit(print("random success, answer is: ", keys[i] ))
-           break
         var = decompose(power,prime_numbers)
-        #print(a,keys[i], n, pow(a,keys[i],n))
         if(len(var)==0):
             keys.pop(i)
             if(len(keys3)!= 0):
@@ -170,26 +173,7 @@ def system_of_linear_equations(a,b,b1,n,prime_numbers,keys,keys3):
     return keys, system , keys3
 
 #      
-def linear_equations(a,b,n,prime_numbers):
-    c=15
-    keys3= []
-    keys = []
-    system = []
-    k = random.sample(range(1, n + 1), len(prime_numbers)+c)
-    for i in range(len(prime_numbers)+c):
-        keys = smoothness(a,1, n ,prime_numbers, k[i], keys, keys3)[0]
 
-    ###########MULTIPOCESSING MODULE###########
-    #print("keys", keys)
-    # processes = [Process(target=system_of_linear_equations, args=(a,b,1,n,prime_numbers,keys[i],keys3)) for i in range(len(keys))]
-    # for process in processes:
-    #     keys.apeend(process[0])
-    #     system.append(process[1])
-    #     process.start()
-    #     keys, system
-
-    keys, system = system_of_linear_equations(a,b,1,n,prime_numbers,keys,keys3)[0],system_of_linear_equations(a,b,1,n,prime_numbers,keys,keys3)[1]
-    return keys,system
 
 
 def edit_matrix(system,prime_numbers):
@@ -236,12 +220,21 @@ def solve_system(n,keys,system,prime_numbers):
     return keys, system
 
             
-
+def linear_equations(a,b,n,prime_numbers):
+    c=15
+    keys3= []
+    keys = []
+    system = []
+    k = random.sample(range(1, n + 1), len(prime_numbers)+c)
+    for i in range(len(prime_numbers)+c):
+        keys, keys3 = smoothness(a,1, n ,prime_numbers, k[i], keys, keys3)
+    keys, system = system_of_linear_equations(a,b,1,n,prime_numbers,keys,keys3)[0],system_of_linear_equations(a,b,1,n,prime_numbers,keys,keys3)[1]
+    return keys,system
 
 def unsolved_answers(a,b,n,prime_numbers):
     keys2 = []
     keys3 = []
-
+    system2 = []
     l = random.sample(range(1, n), len(prime_numbers))
     for i in range(len(prime_numbers)):
         keys2,keys3 = smoothness(a,b, n ,prime_numbers, l[i], keys2, keys3)
@@ -255,7 +248,6 @@ def unsolved_answers(a,b,n,prime_numbers):
 
 def solve_index_calculus(keys,system,keys2,system2):
     x = 0
-    print(keys2[0][1])
     print("apappa",keys,"apappa",system,"apappa",keys2,"apappa",system2)
     for i in range(len(system2)):
         idx = np.where((system == (system2[i])).all(axis=1))
@@ -274,16 +266,19 @@ def solve_index_calculus(keys,system,keys2,system2):
 
 def index_calculus(a,b,n):
     prime_numbers = choose_prime_numbers(n)
+    print(prime_numbers)
     keys, system = linear_equations(a,b,n,prime_numbers)
+    print(1)
     keys, system = solve_system(n,keys,system,prime_numbers)
+    print(1)
     keys2, system2 = unsolved_answers(a,b,n,prime_numbers)
     system2 = edit_matrix(system2,prime_numbers)
     x = solve_index_calculus(keys,system,keys2,system2)
     return x
 
-a = 2
-b = 13
-n = 37
+a = 20
+b = 49
+n = 383
 
 print("X = ",index_calculus(a,b,n))
 
