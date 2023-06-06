@@ -271,14 +271,18 @@ def solve_index_calculus(keys,system,keys2,system2):
 
 
 def index_calculus(a,b,n):
+
     prime_numbers = choose_prime_numbers(n)
-    #print(prime_numbers)
+    print(prime_numbers)
     keys, system = linear_equations(a,b,n,prime_numbers)
     keys, system = solve_system(n,keys,system,prime_numbers)
     keys2, system2 = unsolved_answers(a,b,n,prime_numbers)
     system2 = edit_matrix(system2,prime_numbers)
     x = solve_index_calculus(keys,system,keys2,system2)
     return x
+
+
+
 
 def start(a,b,n):
     if(n<1000000):
